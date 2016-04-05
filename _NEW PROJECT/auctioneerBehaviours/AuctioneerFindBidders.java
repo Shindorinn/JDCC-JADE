@@ -1,14 +1,16 @@
+package auctioneerBehaviours;
 import jade.core.AID;
 import jade.core.behaviours.Behaviour;
 import jade.domain.DFService;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
+import main.Auctioneer;
 
-public class AuctoneerFindBidders extends Behaviour 
+public class AuctioneerFindBidders extends Behaviour 
 {
 	private Auctioneer parent;
 	
-	public AuctoneerFindBidders(Auctioneer agent) 
+	public AuctioneerFindBidders(Auctioneer agent) 
 	{
         super(agent);
         parent = agent;
@@ -25,14 +27,18 @@ public class AuctoneerFindBidders extends Behaviour
             
             try 
             {
-	            DFAgentDescription[] agentsFound = DFService.search(parent, dfTemplate); 
+	            DFAgentDescription[] agentsFound = DFService.search(parent, dfTemplate);
+	            System.out.println("Bidders found: " + agentsFound.length);
 	            if (agentsFound.length > 0) 
 	            {
 	                parent.bidders = new AID[agentsFound.length];
 	                for (int i = 0; i < agentsFound.length; ++i) 
 	                {
 	                    parent.bidders[i] = agentsFound[i].getName();
+	                    System.out.println("Bidder Name: " + parent.bidders[i].getName());
 	                }
+	                System.out.println("");
+	                
 	                parent.foundBidders = true;  
 	            }
             }
