@@ -17,8 +17,10 @@ public class AuctioneerSecondPrice extends TickerBehaviour
 	@Override
 	public void onTick()
 	{
+		System.out.println("STARTING SECOND-PRICE AUCTIONS");
+		
 		if(parent.db.getItems().length > parent.currentItemIndex)
-		{	
+		{				
 			// Find available Bidders
 	        parent.addBehaviour(new AuctioneerFindBidders(parent));
 	        

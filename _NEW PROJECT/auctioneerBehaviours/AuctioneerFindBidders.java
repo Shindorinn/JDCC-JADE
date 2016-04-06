@@ -28,6 +28,7 @@ public class AuctioneerFindBidders extends Behaviour
             try 
             {
 	            DFAgentDescription[] agentsFound = DFService.search(parent, dfTemplate);
+	            System.out.println("");
 	            System.out.println("Bidders found: " + agentsFound.length);
 	            if (agentsFound.length > 0) 
 	            {

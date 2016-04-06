@@ -4,11 +4,11 @@ import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import main.BidderAgent;
 
-public class BidderAgentRecieveBidProposal extends CyclicBehaviour 
+public class BidderAgentReceiveBidProposal extends CyclicBehaviour 
 {
 	private BidderAgent parent;
 	
-	public BidderAgentRecieveBidProposal(BidderAgent agent)
+	public BidderAgentReceiveBidProposal(BidderAgent agent)
 	{
 		super(agent);
 		parent = agent;
@@ -44,7 +44,7 @@ public class BidderAgentRecieveBidProposal extends CyclicBehaviour
             {
                 reply.setPerformative(ACLMessage.REFUSE);
                 reply.setContent("drop auction");
-                System.out.println(parent.getAID().getLocalName() + " is out (No more money)");
+                System.out.println(parent.getAID().getLocalName() + " is out (Not enough money)");
             }
 
             // send the reply

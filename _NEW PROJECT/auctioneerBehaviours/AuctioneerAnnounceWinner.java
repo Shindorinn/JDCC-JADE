@@ -1,5 +1,6 @@
 package auctioneerBehaviours;
 
+import jade.core.AID;
 import jade.core.behaviours.Behaviour;
 import jade.lang.acl.ACLMessage;
 import main.Auctioneer;
@@ -32,14 +33,28 @@ public class AuctioneerAnnounceWinner extends Behaviour
 			}
 			
 			// send message to the winner to let him know that his bid was accepted
+			String itemName = parent.db.getItems()[parent.currentItemIndex].getName();
 			ACLMessage winMsg = new ACLMessage(ACLMessage.ACCEPT_PROPOSAL);
 			winMsg.addReceiver(parent.maxBidAgent);
-			winMsg.setContent("won," + finalPrice);
+			winMsg.setContent("won," + finalPrice + "," + itemName);
 			winMsg.setConversationId("SecondPrice-winner");
 			winMsg.setReplyWith("winner"+System.currentTimeMillis());
 			parent.send(winMsg);
 			
-			String itemName = parent.db.getItems()[parent.currentItemIndex].getName();
+			// Send message to all other agents that they lost
+			ACLMessage loseMsg = new ACLMessage(ACLMessage.REJECT_PROPOSAL);
+			for(AID agent : parent.bidders)
+			{
+				if(!agent.equals(parent.maxBidAgent))
+				{
+					loseMsg.addReceiver(agent);
+				}
+			}
+			loseMsg.setContent("lost," + itemName);
+			loseMsg.setConversationId("SecondPrice-loser");
+			loseMsg.setReplyWith("loser"+System.currentTimeMillis());
+			parent.send(loseMsg);
+			
 			System.out.println("Winner: " + parent.maxBidAgent.getLocalName() + " item: " + itemName + " for: " + finalPrice);
 			System.out.println("");
 			

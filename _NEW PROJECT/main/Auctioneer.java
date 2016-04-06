@@ -44,7 +44,7 @@ public class Auctioneer extends Agent
 		
 		if(auctionType == AuctionType.secondPrice)
 		{
-			 addBehaviour(new AuctioneerSecondPrice(this));
+			addBehaviour(new AuctioneerSecondPrice(this));
 		}
 	}
 }

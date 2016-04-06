@@ -11,7 +11,7 @@ public class Database
 		private final int ITEMSMAXPRICE = 9000;
 		private AuctionItem[] items;
 		
-		public int getBIDDERSNUMBER() {
+		public int getBidderNumber() {
 			return BIDDERSNUMBER;
 		}
 		

@@ -1,7 +1,8 @@
 package main;
 import java.util.Random;
 
-import bidderBehaviours.BidderAgentRecieveBidProposal;
+import bidderBehaviours.BidderAgentLoser;
+import bidderBehaviours.BidderAgentReceiveBidProposal;
 import bidderBehaviours.BidderAgentWinner;
 import jade.core.Agent;
 import jade.domain.DFService;
@@ -41,10 +42,13 @@ public class BidderAgent extends Agent
 		money = generateMoney();
 		
 		//Add behaviour to receive bid proposal messages
-		addBehaviour(new BidderAgentRecieveBidProposal(this));
+		addBehaviour(new BidderAgentReceiveBidProposal(this));
 		
 		// Add behaviour to receive the winning message if this agent won the auction
 		addBehaviour(new BidderAgentWinner(this));
+		
+		// Add behaviour to receive the losing message if this agent lost the auction
+		addBehaviour(new BidderAgentLoser(this));
 	}
 	
 	private int generateMoney()
@@ -63,7 +67,7 @@ public class BidderAgent extends Agent
 		}
 		
 		// Calculate the min and max of the possible amount of money this agent can have
-		moneyAverage = totalPrice/db.getBIDDERSNUMBER();
+		moneyAverage = totalPrice/db.getBidderNumber();
 		
 		// Calculate the offset based on the selected percentage, and calculate min and max
 		moneyOffset = moneyAverage*moneyOffsetPercentage/100;
