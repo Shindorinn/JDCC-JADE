@@ -44,7 +44,7 @@ public class BidderAgentRecieveBidProposal extends CyclicBehaviour
             {
                 reply.setPerformative(ACLMessage.REFUSE);
                 reply.setContent("drop auction");
-                System.out.println(parent.getAID().getName() + " is out (No more money)");
+                System.out.println(parent.getAID().getLocalName() + " is out (No more money)");
             }
 
             // send the reply

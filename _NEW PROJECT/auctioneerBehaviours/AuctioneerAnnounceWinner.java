@@ -37,6 +37,7 @@ public class AuctioneerAnnounceWinner extends Behaviour
 			winMsg.setContent("won," + finalPrice);
 			winMsg.setConversationId("SecondPrice-winner");
 			winMsg.setReplyWith("winner"+System.currentTimeMillis());
+			parent.send(winMsg);
 			
 			String itemName = parent.db.getItems()[parent.currentItemIndex].getName();
 			System.out.println("Winner: " + parent.maxBidAgent.getLocalName() + " item: " + itemName + " for: " + finalPrice);
@@ -51,7 +52,9 @@ public class AuctioneerAnnounceWinner extends Behaviour
 		}
 		else 
 		{
-            System.out.println("No bids were made. No Winner");
+			String itemName = parent.db.getItems()[parent.currentItemIndex].getName();
+            System.out.println(itemName + ": No bids were made. No Winner");
+            System.out.println("");
         }
         auctionEnded = true;
         

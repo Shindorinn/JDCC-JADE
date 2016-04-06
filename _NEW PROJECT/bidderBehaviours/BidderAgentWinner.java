@@ -19,7 +19,7 @@ public class BidderAgentWinner extends CyclicBehaviour
 	public void action() 
 	{
 		MessageTemplate mt = MessageTemplate.MatchPerformative(ACLMessage.ACCEPT_PROPOSAL);
-        ACLMessage msg = myAgent.receive(mt);
+        ACLMessage msg = parent.receive(mt);
         
         // Check if message is empty, else process it
         if (msg != null) 
@@ -27,9 +27,9 @@ public class BidderAgentWinner extends CyclicBehaviour
         	// Split message
             String[] content = msg.getContent().split(",");
             int finalPrice = Integer.parseInt(content[1]);
-
+            
             // decrease money
-            parent.money -= finalPrice;            
+            parent.money -= finalPrice;
         }
         else 
         {
