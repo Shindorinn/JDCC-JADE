@@ -39,7 +39,7 @@ public class BidderAgent extends Agent
 		}
 		
 		// generate random money
-		money = generateMoney();
+		generateMoney();
 		
 		//Add behaviour to receive bid proposal messages
 		addBehaviour(new BidderAgentReceiveBidProposal(this));
@@ -51,9 +51,8 @@ public class BidderAgent extends Agent
 		addBehaviour(new BidderAgentLoser(this));
 	}
 	
-	private int generateMoney()
+	private void generateMoney()
 	{
-		int generatedMoney = 0;
 		int totalPrice = 0;
 		int moneyAverage;
 		int moneyMin;
@@ -76,8 +75,11 @@ public class BidderAgent extends Agent
 		
 		// Generate a random based on min and max
 		Random rd = new Random();
-		generatedMoney = moneyMin + rd.nextInt(moneyMax-moneyMin);
+		money = moneyMin + rd.nextInt(moneyMax-moneyMin);
+	}
+	
+	private void generatePreferences()
+	{
 		
-		return generatedMoney;
 	}
 }

@@ -37,6 +37,10 @@ public class AuctioneerReceiveBids extends Behaviour
                         parent.maxBid = bid;
                         parent.maxBidAgent = msg.getSender();
                     }
+                    else if(bid > parent.secondMaxBid)
+                    {
+                    	parent.secondMaxBid = bid;
+                    }
 
                     // Let the agent know that the bid was received with an inform reply
                     ACLMessage reply = msg.createReply();
