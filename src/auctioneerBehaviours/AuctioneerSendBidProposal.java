@@ -7,13 +7,15 @@ import main.Auctioneer;
 public class AuctioneerSendBidProposal extends Behaviour 
 {
 	private Auctioneer parent;
+	private int itemIndex;
     private String itemName;
     private int itemStartingPrice;
 
-    public AuctioneerSendBidProposal(Auctioneer agent, String itemName, int itemStartingPrice) 
+    public AuctioneerSendBidProposal(Auctioneer agent, int itemIndex, String itemName, int itemStartingPrice) 
     {
         super(agent);
         parent = agent;
+        this.itemIndex = itemIndex;
         this.itemName = itemName;
         this.itemStartingPrice = itemStartingPrice;
     }
@@ -32,13 +34,37 @@ public class AuctioneerSendBidProposal extends Behaviour
                 cfp.addReceiver(parent.bidders[i]);
             } 
             
-            cfp.setContent(this.itemName + "," + this.itemStartingPrice);
-            cfp.setConversationId("SecondPrice-bid");
-            cfp.setReplyWith("cfp"+System.currentTimeMillis());
-            parent.send(cfp);
-
-            // Prepare message template
-            parent.mt = MessageTemplate.and(MessageTemplate.MatchConversationId("SecondPrice-bid"), MessageTemplate.MatchInReplyTo(cfp.getReplyWith()));
+            // construct message based on auction type
+            if(parent.db.getAuctionType() == 1)
+    		{
+	            cfp.setContent(this.itemIndex + "," + this.itemName + "," + this.itemStartingPrice);
+	            cfp.setConversationId("English-bid");
+	            cfp.setReplyWith("cfp"+System.currentTimeMillis());
+	            parent.send(cfp);
+	
+	            // Prepare message template
+	            parent.mt = MessageTemplate.and(MessageTemplate.MatchConversationId("English-bid"), MessageTemplate.MatchInReplyTo(cfp.getReplyWith()));
+    		}
+            else if(parent.db.getAuctionType() == 2)
+            {
+            	cfp.setContent(this.itemIndex + "," + this.itemName + "," + this.itemStartingPrice);
+	            cfp.setConversationId("Dutch-bid");
+	            cfp.setReplyWith("cfp"+System.currentTimeMillis());
+	            parent.send(cfp);
+	
+	            // Prepare message template
+	            parent.mt = MessageTemplate.and(MessageTemplate.MatchConversationId("Dutch-bid"), MessageTemplate.MatchInReplyTo(cfp.getReplyWith()));
+            }
+            else if(parent.db.getAuctionType() == 3)
+            {
+            	cfp.setContent(this.itemIndex + "," + this.itemName + "," + this.itemStartingPrice);
+	            cfp.setConversationId("SecondPrice-bid");
+	            cfp.setReplyWith("cfp"+System.currentTimeMillis());
+	            parent.send(cfp);
+	
+	            // Prepare message template
+	            parent.mt = MessageTemplate.and(MessageTemplate.MatchConversationId("SecondPrice-bid"), MessageTemplate.MatchInReplyTo(cfp.getReplyWith()));
+            }
         
             parent.bidProposalSent = true;
         }
