@@ -17,8 +17,6 @@ public class AuctioneerSecondPrice extends TickerBehaviour
 	@Override
 	public void onTick()
 	{
-		System.out.println("STARTING SECOND-PRICE AUCTIONS");
-		
 		if(parent.db.getItems().length > parent.currentItemIndex)
 		{				
 			// Find available Bidders
@@ -29,7 +27,7 @@ public class AuctioneerSecondPrice extends TickerBehaviour
 	        int currentItemStartingPrice = parent.db.getItems()[currentItem].getStartingPrice();
 	        
 	        // Send bid proposal to all bidders
-	        parent.addBehaviour(new AuctioneerSendBidProposal(parent, currentItemName, currentItemStartingPrice));
+	        parent.addBehaviour(new AuctioneerSendBidProposal(parent, currentItem, currentItemName, currentItemStartingPrice));
 	        
 	        // Receive the replies to the bid proposals
 	        parent.addBehaviour(new AuctioneerReceiveBids(parent));

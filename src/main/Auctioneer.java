@@ -11,8 +11,7 @@ import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 
-public class Auctioneer extends Agent 
-{
+public class Auctioneer extends Agent {
 	public enum AuctionType 
 	{
 	    english,
@@ -21,6 +20,7 @@ public class Auctioneer extends Agent
 	}
 	
 	public static AuctionType AUCTION_TYPE = AuctionType.secondPrice;
+	
 	public Database.AuctionDatabase db;
 	
 	public boolean auctionStarted = false;
@@ -42,8 +42,9 @@ public class Auctioneer extends Agent
 		// Create the items database
 		db = new Database.AuctionDatabase();
 		
-		if(AUCTION_TYPE == AuctionType.secondPrice)
+		if(db.getAuctionType() == 3)
 		{
+			System.out.println("STARTING SECOND-PRICE AUCTIONS");
 			addBehaviour(new AuctioneerSecondPrice(this));
 		}
 	}

@@ -14,6 +14,8 @@ import jade.domain.FIPAAgentManagement.ServiceDescription;
 public class BidderAgent extends Agent 
 {
 	public int money;
+	public int initMoney;
+	public int[] preferences;
 	int moneyOffsetPercentage = 10;
 	
 	public Database.AuctionDatabase db;
@@ -53,7 +55,7 @@ public class BidderAgent extends Agent
 			// Add behaviour to receive the losing message if this agent lost the auction
 			addBehaviour(new BidderAgentLoser(this));
 
-		} else if (Auctioneer.AUCTION_TYPE == Auctioneer.AuctionType.secondPrice){
+		} else if (Auctioneer.AUCTION_TYPE == Auctioneer.AuctionType.dutch){
 			
 			//Add behaviour to receive bid proposal messages
 			addBehaviour(new DutchBidderAgentReceiveBidProposal(this));
@@ -64,8 +66,7 @@ public class BidderAgent extends Agent
 			// Add behaviour to receive the losing message if this agent lost the auction
 			addBehaviour(new BidderAgentLoser(this));
 			
-		}
-		
+		}		
 	}
 	
 	private void generateMoney()
@@ -93,10 +94,18 @@ public class BidderAgent extends Agent
 		// Generate a random based on min and max
 		Random rd = new Random();
 		money = moneyMin + rd.nextInt(moneyMax-moneyMin);
+		initMoney = money;
 	}
 	
 	private void generatePreferences()
 	{
+		preferences = new int[db.getItems().length];
+		Random rd = new Random();
 		
+		// fill the preferences table
+		for(int i=0; i < preferences.length; i++)
+		{
+			preferences[i] = rd.nextInt(100);
+		}
 	}
 }
