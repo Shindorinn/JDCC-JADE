@@ -44,7 +44,9 @@ public class BidderAgent extends Agent
 		// generate random money
 		generateMoney();
 		
-		if(Auctioneer.AUCTION_TYPE == Auctioneer.AuctionType.secondPrice){
+		//
+		generatePreferences();
+		
 			
 			//Add behaviour to receive bid proposal messages
 			addBehaviour(new BidderAgentReceiveBidProposal(this));
@@ -54,19 +56,6 @@ public class BidderAgent extends Agent
 			
 			// Add behaviour to receive the losing message if this agent lost the auction
 			addBehaviour(new BidderAgentLoser(this));
-
-		} else if (Auctioneer.AUCTION_TYPE == Auctioneer.AuctionType.dutch){
-			
-			//Add behaviour to receive bid proposal messages
-			addBehaviour(new DutchBidderAgentReceiveBidProposal(this));
-			
-			// Add behaviour to receive the winning message if this agent won the auction
-			addBehaviour(new BidderAgentWinner(this));
-			
-			// Add behaviour to receive the losing message if this agent lost the auction
-			addBehaviour(new BidderAgentLoser(this));
-			
-		}		
 	}
 	
 	private void generateMoney()

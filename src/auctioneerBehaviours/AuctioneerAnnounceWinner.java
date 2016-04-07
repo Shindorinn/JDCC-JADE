@@ -3,7 +3,9 @@ package auctioneerBehaviours;
 import jade.core.AID;
 import jade.core.behaviours.Behaviour;
 import jade.lang.acl.ACLMessage;
+import jade.lang.acl.MessageTemplate;
 import main.Auctioneer;
+import main.Database;
 
 public class AuctioneerAnnounceWinner extends Behaviour 
 {
@@ -21,6 +23,9 @@ public class AuctioneerAnnounceWinner extends Behaviour
 		// Check if there were any bids
 		if(parent.maxBid > 0)
 		{
+			String itemName = parent.db.getItems()[parent.currentItemIndex].getName();
+			ACLMessage winMsg = new ACLMessage(ACLMessage.ACCEPT_PROPOSAL);
+			
 			// if there was only one bid, just get the max bid, else get the second max bid
 			int finalPrice;
 			if(parent.secondMaxBid > 0)
@@ -32,16 +37,16 @@ public class AuctioneerAnnounceWinner extends Behaviour
 				finalPrice = parent.maxBid;
 			}
 			
-			// send message to the winner to let him know that his bid was accepted
-			String itemName = parent.db.getItems()[parent.currentItemIndex].getName();
-			ACLMessage winMsg = new ACLMessage(ACLMessage.ACCEPT_PROPOSAL);
+        	System.out.println("Winner: " + parent.maxBidAgent.getLocalName() + " item: " + itemName + " for: " + finalPrice);
+			System.out.println("");
+
+			// Create message to send to the winner to let him know that his bid was accepted
 			winMsg.addReceiver(parent.maxBidAgent);
 			winMsg.setContent("won," + finalPrice + "," + itemName);
-			winMsg.setConversationId("SecondPrice-winner");
 			winMsg.setReplyWith("winner"+System.currentTimeMillis());
-			parent.send(winMsg);
 			
-			// Send message to all other agents that they lost
+
+			// Create message to send to all other agents that they lost
 			ACLMessage loseMsg = new ACLMessage(ACLMessage.REJECT_PROPOSAL);
 			for(AID agent : parent.bidders)
 			{
@@ -51,13 +56,27 @@ public class AuctioneerAnnounceWinner extends Behaviour
 				}
 			}
 			loseMsg.setContent("lost," + itemName);
-			loseMsg.setConversationId("SecondPrice-loser");
 			loseMsg.setReplyWith("loser"+System.currentTimeMillis());
+					
+	        // construct message based on auction type
+	        if(parent.db.getAuctionType() == Database.AuctionDatabase.ENGLISH_AUCTION)
+			{
+	            winMsg.setConversationId("English-bid");
+	            loseMsg.setConversationId("English-loser");
+			}
+	        else if(parent.db.getAuctionType() == Database.AuctionDatabase.DUTCH_AUCTION)
+	        {
+	            winMsg.setConversationId("Dutch-bid");
+	            loseMsg.setConversationId("Dutch-loser");
+	                 }
+	        else if(parent.db.getAuctionType() == Database.AuctionDatabase.SECOND_PRICE_AUCTION)
+	        {
+	        	winMsg.setConversationId("SecondPrice-winner");
+	        	loseMsg.setConversationId("SecondPrice-loser");
+	        }
+			parent.send(winMsg);
 			parent.send(loseMsg);
-			
-			System.out.println("Winner: " + parent.maxBidAgent.getLocalName() + " item: " + itemName + " for: " + finalPrice);
-			System.out.println("");
-			
+						
 			// Initialize all variables for next round
             parent.foundBidders = false;
             parent.bidProposalSent = false;

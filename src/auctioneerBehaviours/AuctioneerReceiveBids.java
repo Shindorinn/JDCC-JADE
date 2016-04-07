@@ -22,6 +22,8 @@ public class AuctioneerReceiveBids extends Behaviour
 		{
 			// receive replies
 			ACLMessage msg = myAgent.receive(parent.mt);
+			//System.out.println("AuctioneerReceiveBids mt: " + parent.mt);
+			//System.out.println("AuctioneerReceiveBids: " + msg.toString());
 			
 			// check if message is empty
 			if (msg != null) 

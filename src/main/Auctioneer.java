@@ -1,6 +1,7 @@
 package main;
 import java.util.*;
 
+import auctioneerBehaviours.AuctioneerDutchAuction;
 import auctioneerBehaviours.AuctioneerSecondPrice;
 import jade.core.Agent;
 import jade.core.AID;
@@ -10,6 +11,7 @@ import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
+import main.Auctioneer.AuctionType;
 
 public class Auctioneer extends Agent {
 	public enum AuctionType 
@@ -19,7 +21,7 @@ public class Auctioneer extends Agent {
 	    secondPrice
 	}
 	
-	public static AuctionType AUCTION_TYPE = AuctionType.secondPrice;
+	public static AuctionType AUCTION_TYPE = AuctionType.dutch;
 	
 	public Database.AuctionDatabase db;
 	
@@ -36,16 +38,25 @@ public class Auctioneer extends Agent {
 	public AID[] bidders;
     public MessageTemplate mt; 
 	
+	public int currentItemPrice;
+	public boolean bidTimerRanOut = false;
+	
+    
 	@Override
 	protected void setup()
 	{		
 		// Create the items database
 		db = new Database.AuctionDatabase();
 		
-		if(db.getAuctionType() == 3)
-		{
-			System.out.println("STARTING SECOND-PRICE AUCTIONS");
-			addBehaviour(new AuctioneerSecondPrice(this));
+		if(AUCTION_TYPE == AuctionType.secondPrice){
+			
+			if(db.getAuctionType() == 3)
+			{
+				System.out.println("STARTING SECOND-PRICE AUCTIONS");
+				addBehaviour(new AuctioneerSecondPrice(this));
+			}
+		} else if(AUCTION_TYPE == AuctionType.dutch){
+				addBehaviour(new AuctioneerDutchAuction(this));
 		}
 	}
 }

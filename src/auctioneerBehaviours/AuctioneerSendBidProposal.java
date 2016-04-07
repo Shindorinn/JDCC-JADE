@@ -3,6 +3,7 @@ import jade.core.behaviours.Behaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import main.Auctioneer;
+import main.Database;
 
 public class AuctioneerSendBidProposal extends Behaviour 
 {
@@ -35,7 +36,7 @@ public class AuctioneerSendBidProposal extends Behaviour
             } 
             
             // construct message based on auction type
-            if(parent.db.getAuctionType() == 1)
+            if(parent.db.getAuctionType() == Database.AuctionDatabase.ENGLISH_AUCTION)
     		{
 	            cfp.setContent(this.itemIndex + "," + this.itemName + "," + this.itemStartingPrice);
 	            cfp.setConversationId("English-bid");
@@ -45,7 +46,7 @@ public class AuctioneerSendBidProposal extends Behaviour
 	            // Prepare message template
 	            parent.mt = MessageTemplate.and(MessageTemplate.MatchConversationId("English-bid"), MessageTemplate.MatchInReplyTo(cfp.getReplyWith()));
     		}
-            else if(parent.db.getAuctionType() == 2)
+            else if(parent.db.getAuctionType() == Database.AuctionDatabase.DUTCH_AUCTION)
             {
             	cfp.setContent(this.itemIndex + "," + this.itemName + "," + this.itemStartingPrice);
 	            cfp.setConversationId("Dutch-bid");
@@ -55,7 +56,7 @@ public class AuctioneerSendBidProposal extends Behaviour
 	            // Prepare message template
 	            parent.mt = MessageTemplate.and(MessageTemplate.MatchConversationId("Dutch-bid"), MessageTemplate.MatchInReplyTo(cfp.getReplyWith()));
             }
-            else if(parent.db.getAuctionType() == 3)
+            else if(parent.db.getAuctionType() == Database.AuctionDatabase.SECOND_PRICE_AUCTION)
             {
             	cfp.setContent(this.itemIndex + "," + this.itemName + "," + this.itemStartingPrice);
 	            cfp.setConversationId("SecondPrice-bid");
@@ -65,7 +66,8 @@ public class AuctioneerSendBidProposal extends Behaviour
 	            // Prepare message template
 	            parent.mt = MessageTemplate.and(MessageTemplate.MatchConversationId("SecondPrice-bid"), MessageTemplate.MatchInReplyTo(cfp.getReplyWith()));
             }
-        
+            
+            System.out.println("AuctioneerSendBidProposal : " + cfp.toString());
             parent.bidProposalSent = true;
         }
 	}

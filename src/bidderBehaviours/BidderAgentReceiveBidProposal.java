@@ -5,6 +5,8 @@ import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import main.BidderAgent;
+import main.Database;
+import main.Database.AuctionDatabase;
 
 public class BidderAgentReceiveBidProposal extends CyclicBehaviour 
 {
@@ -54,10 +56,12 @@ public class BidderAgentReceiveBidProposal extends CyclicBehaviour
             }
 
             // send the reply
+            //System.out.println("BidderAgentReceiveBidProposal : " + reply);
             parent.send(reply);
 		}
 		else 
 		{
+			//System.out.println("BidderAgentReceiveBidProposal: Blocking aswell!");
             block();
         }
 	}
@@ -92,7 +96,7 @@ public class BidderAgentReceiveBidProposal extends CyclicBehaviour
 		}
 		
 		// calculate the new bid based on the auction type
-		if(parent.db.getAuctionType() == 1)
+		if(parent.db.getAuctionType() == AuctionDatabase.ENGLISH_AUCTION)
 		{
 			// the bid jump is based on the default percentage of the starting price and the agent's preference for this item 
 			int bidJumpPercentage = parent.db.getBidJumpPercentage();
@@ -105,7 +109,12 @@ public class BidderAgentReceiveBidProposal extends CyclicBehaviour
 				bid = maxBid;
 			}
 		}
-		else if(parent.db.getAuctionType() == 3)
+		else if(parent.db.getAuctionType() == AuctionDatabase.DUTCH_AUCTION){
+			if(itemStartingPrice <= maxBid)
+				bid = itemStartingPrice;
+		}
+		
+		else if(parent.db.getAuctionType() == AuctionDatabase.SECOND_PRICE_AUCTION)
 		{
 			bid = maxBid;
 		}

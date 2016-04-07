@@ -5,6 +5,10 @@ public class Database
 {
 	public static class AuctionDatabase
 	{
+		public static final int ENGLISH_AUCTION = 1;
+		public static final int DUTCH_AUCTION = 2;
+		public static final int SECOND_PRICE_AUCTION = 3;
+		
 		private final int ITEMSNUMBER = 10;
 		private final int BIDDERSNUMBER = 2;
 		private final int ITEMSMINPRICE = 1000;
@@ -41,7 +45,7 @@ public class Database
 
 		public AuctionDatabase()
 		{
-			auctionType = 3;
+			auctionType = 2;
 			
 			Random rn = new Random();
 			items = new AuctionItem[ITEMSNUMBER];

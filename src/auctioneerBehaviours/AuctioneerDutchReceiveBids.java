@@ -4,22 +4,22 @@ import jade.core.Timer;
 import jade.core.TimerListener;
 import jade.core.behaviours.Behaviour;
 import jade.lang.acl.ACLMessage;
-import main.DAuctioneer;
+import main.Auctioneer;
 
 public class AuctioneerDutchReceiveBids extends Behaviour 
 {
-	private DAuctioneer parent;
+	private Auctioneer parent;
 	private Timer timer;
 	
 	int replies = 0;
 	
 	
 	
-	public AuctioneerDutchReceiveBids(DAuctioneer agent) 
+	public AuctioneerDutchReceiveBids(Auctioneer agent) 
 	{
         super(agent);
         parent = agent;
-        this.timer = new Timer(System.currentTimeMillis() + 10000, new TimerListener() {
+        this.timer = new Timer(System.currentTimeMillis() + 1000, new TimerListener() {
 			
 			@Override
 			public void doTimeOut(Timer arg0) {
@@ -35,10 +35,12 @@ public class AuctioneerDutchReceiveBids extends Behaviour
 		{
 			// receive replies
 			ACLMessage msg = myAgent.receive(parent.mt);
+			//System.out.println("AuctioneerDutchReceiveBids mt: " + parent.mt);
 			
 			// check if message is empty
 			if (msg != null) 
 			{
+			//System.out.println("AuctioneerReceiveBids: " + msg.toString());
                 // check if this reply was a new bid
                 if (msg.getPerformative() == ACLMessage.PROPOSE) 
                 {
@@ -69,6 +71,7 @@ public class AuctioneerDutchReceiveBids extends Behaviour
             }
             else 
             {
+            	//System.out.println("AuctioneerDutchReceiveBids: Blocking!");
                 block();
             }
 			
@@ -82,6 +85,6 @@ public class AuctioneerDutchReceiveBids extends Behaviour
 	
 	public boolean done() 
 	{
-        return parent.bidProposalsRepliesReceived;
+        return parent.bidProposalsRepliesReceived || parent.bidTimerRanOut;
     }
 }

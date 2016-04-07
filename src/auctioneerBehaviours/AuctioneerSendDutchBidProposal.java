@@ -41,6 +41,9 @@ public class AuctioneerSendDutchBidProposal extends Behaviour {
 	        parent.mt = MessageTemplate.and(MessageTemplate.MatchConversationId("Dutch-bid"), MessageTemplate.MatchInReplyTo(cfp.getReplyWith()));
 	    
 	        parent.bidProposalSent = true;
+	        
+
+            System.out.println("DutchAuctioneerSendBidProposal : " + cfp.toString());
 	    }
 	}
 

@@ -48,6 +48,7 @@ public class DutchBidderAgentReceiveBidProposal extends CyclicBehaviour
             }
 
             // send the reply
+            System.out.println("DutchBidderAgentReceiveBidProposal : " + reply);
             parent.send(reply);
 		}
 		else 
