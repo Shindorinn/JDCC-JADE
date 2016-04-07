@@ -20,7 +20,7 @@ public class Auctioneer extends Agent
 	    secondPrice
 	}
 	
-	public AuctionType auctionType = AuctionType.secondPrice;
+	public static AuctionType AUCTION_TYPE = AuctionType.secondPrice;
 	public Database.AuctionDatabase db;
 	
 	public boolean auctionStarted = false;
@@ -42,7 +42,7 @@ public class Auctioneer extends Agent
 		// Create the items database
 		db = new Database.AuctionDatabase();
 		
-		if(auctionType == AuctionType.secondPrice)
+		if(AUCTION_TYPE == AuctionType.secondPrice)
 		{
 			addBehaviour(new AuctioneerSecondPrice(this));
 		}

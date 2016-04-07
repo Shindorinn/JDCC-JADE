@@ -30,7 +30,10 @@ public class Database
 			
 			for(int i=0; i < ITEMSNUMBER; i++)
 			{
-				items[i] = new AuctionItem("item" + i, ITEMSMINPRICE + rn.nextInt(ITEMSMAXPRICE));
+				int startingPrice = ITEMSMINPRICE + rn.nextInt(ITEMSMAXPRICE);
+				int minimumPrice = ITEMSMINPRICE + rn.nextInt(startingPrice-ITEMSMINPRICE);
+								
+				items[i] = new AuctionItem("item" + i, startingPrice, minimumPrice);
 			}
 		}
 	}

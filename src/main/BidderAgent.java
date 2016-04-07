@@ -4,6 +4,7 @@ import java.util.Random;
 import bidderBehaviours.BidderAgentLoser;
 import bidderBehaviours.BidderAgentReceiveBidProposal;
 import bidderBehaviours.BidderAgentWinner;
+import bidderBehaviours.DutchBidderAgentReceiveBidProposal;
 import jade.core.Agent;
 import jade.domain.DFService;
 import jade.domain.FIPAException;
@@ -41,14 +42,30 @@ public class BidderAgent extends Agent
 		// generate random money
 		generateMoney();
 		
-		//Add behaviour to receive bid proposal messages
-		addBehaviour(new BidderAgentReceiveBidProposal(this));
+		if(Auctioneer.AUCTION_TYPE == Auctioneer.AuctionType.secondPrice){
+			
+			//Add behaviour to receive bid proposal messages
+			addBehaviour(new BidderAgentReceiveBidProposal(this));
+			
+			// Add behaviour to receive the winning message if this agent won the auction
+			addBehaviour(new BidderAgentWinner(this));
+			
+			// Add behaviour to receive the losing message if this agent lost the auction
+			addBehaviour(new BidderAgentLoser(this));
+
+		} else if (Auctioneer.AUCTION_TYPE == Auctioneer.AuctionType.secondPrice){
+			
+			//Add behaviour to receive bid proposal messages
+			addBehaviour(new DutchBidderAgentReceiveBidProposal(this));
+			
+			// Add behaviour to receive the winning message if this agent won the auction
+			addBehaviour(new BidderAgentWinner(this));
+			
+			// Add behaviour to receive the losing message if this agent lost the auction
+			addBehaviour(new BidderAgentLoser(this));
+			
+		}
 		
-		// Add behaviour to receive the winning message if this agent won the auction
-		addBehaviour(new BidderAgentWinner(this));
-		
-		// Add behaviour to receive the losing message if this agent lost the auction
-		addBehaviour(new BidderAgentLoser(this));
 	}
 	
 	private void generateMoney()
